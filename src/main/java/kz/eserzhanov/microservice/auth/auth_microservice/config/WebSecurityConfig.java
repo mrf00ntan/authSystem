@@ -21,6 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JWTAuthorizationFilter jwtAuthorizationFilter;
 
     private final String AUTH_ENDPOINT = "/api/auth/**";
+    private final String ACTUATOR_ENDPOINT = "/actuator/**";
 
     public WebSecurityConfig(JWTAuthorizationFilter jwtAuthorizationFilter) {
         this.jwtAuthorizationFilter = jwtAuthorizationFilter;
@@ -38,6 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterAfter(jwtAuthorizationFilter, BasicAuthenticationFilter.class);
         http.authorizeRequests()
                 .antMatchers(AUTH_ENDPOINT).anonymous()
+                .antMatchers(ACTUATOR_ENDPOINT).permitAll()
                 .anyRequest().authenticated();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.exceptionHandling()
