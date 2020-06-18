@@ -1,0 +1,50 @@
+#JWT
+jwt:
+  access:
+    token:
+      expiration:
+        seconds: 7200
+  encryption:
+    secret: oui2er43hn8934vby39
+  refresh:
+    token:
+      expiration:
+        seconds: 21600
+
+#OnlyDev
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+server:
+  port: 8083
+
+spring:
+  #Database
+  datasource:
+    url: jdbc:postgresql://localhost:5432/auth_service_db
+    driver-class-name: org.postgresql.Driver
+    initialization-mode: always
+    username: postgres
+    password: qweqwe
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    time-zone: Asia/Almaty
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+#Eureke
+eureka:
+  instance:
+    appname: AUTH_SERVICE
+  client:
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone:  http://entry-eureka-server.kz:9000/eureka
