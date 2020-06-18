@@ -6,6 +6,7 @@ import kz.eserzhanov.microservice.auth.auth_microservice.database.exception.Perm
 import kz.eserzhanov.microservice.auth.auth_microservice.database.exception.UserLoginFoundException;
 import kz.eserzhanov.microservice.auth.auth_microservice.database.exception.UserNotFoundException;
 import kz.eserzhanov.microservice.auth.auth_microservice.dto.UserDto;
+import kz.eserzhanov.microservice.auth.auth_microservice.mapper.UserMapper;
 import kz.eserzhanov.microservice.auth.auth_microservice.pojo.AuthRequestPOJO;
 import kz.eserzhanov.microservice.auth.auth_microservice.pojo.AuthResponsePOJO;
 import kz.eserzhanov.microservice.auth.auth_microservice.service.RefreshTokenService;
@@ -20,13 +21,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/auth")
 public class AuthController {
     private final UserService userService;
+    private final UserMapper userMapper;
     private final RefreshTokenService refreshTokenService;
     private final PasswordEncoder passwordEncoder;
     private final JWTAuthorizationFilter jwtAuthorizationFilter;
 
     @Autowired
-    public AuthController(UserService userService, RefreshTokenService refreshTokenService, PasswordEncoder passwordEncoder, JWTAuthorizationFilter jwtAuthorizationFilter) {
+    public AuthController(UserService userService, UserMapper userMapper, RefreshTokenService refreshTokenService, PasswordEncoder passwordEncoder, JWTAuthorizationFilter jwtAuthorizationFilter) {
         this.userService = userService;
+        this.userMapper = userMapper;
         this.refreshTokenService = refreshTokenService;
         this.passwordEncoder = passwordEncoder;
         this.jwtAuthorizationFilter = jwtAuthorizationFilter;
@@ -46,7 +49,7 @@ public class AuthController {
                     throw new UserLoginFoundException("User with login: " + user.getLogin() + " was found");
                 })
                 .orElseGet(() -> {
-                    if(userService.save(request.toUser())){
+                    if(userService.save(userMapper.toUser(request))){
                         return getAuthResponsePOJO(request.getLogin(), request.getPassword());
                     }
                     throw new RuntimeException("Internal Server Error");
