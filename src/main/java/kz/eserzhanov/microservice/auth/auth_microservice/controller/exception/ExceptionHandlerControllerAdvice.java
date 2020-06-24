@@ -50,6 +50,14 @@ public class ExceptionHandlerControllerAdvice extends ResponseEntityExceptionHan
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
     }
 
+    @ExceptionHandler(value = { IllegalArgumentException.class })
+    protected ResponseEntity<Object> IllegalArgumentExceptionHandle(IllegalArgumentException ex, WebRequest request) {
+        Map<String, String> map = new HashMap<>();
+        map.put("errorRu", "Введены неправильные данные");
+        map.put("errorKz", "Қате деректер енгізілді");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
+    }
+
     @ExceptionHandler(value = { RuntimeException.class })
     protected ResponseEntity<Object> runtimeExceptionHandle(RuntimeException ex, WebRequest request) {
         Map<String, String> map = new HashMap<>();
