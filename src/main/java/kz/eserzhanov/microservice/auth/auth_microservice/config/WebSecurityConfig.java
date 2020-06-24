@@ -10,10 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-
-import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
@@ -32,6 +31,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new ExceptionHandlerControllerAdvice();
     }
 
+    @Bean
+    public AuthenticationEntryPoint authenticationFailureHandler(){
+        return new ExceptionHandlerControllerAdvice();
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().disable();
@@ -44,10 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.exceptionHandling()
             .accessDeniedHandler(accessDeniedHandler())
-            .authenticationEntryPoint((request, response, authException) -> {
-                response.setHeader("WWW-Authenticate", "Bearer");
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-            });
+            .authenticationEntryPoint(authenticationFailureHandler());
     }
 
     @Bean

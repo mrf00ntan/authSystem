@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class AuthResponsePOJO {
+    private Long userId;
     private String accessToken;
     private String refreshToken;
 }

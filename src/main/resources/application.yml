@@ -3,12 +3,12 @@ server:
 
 #JWT
 jwt:
+  encryption:
+    secret: oui2er43hn8934vby39
   access:
     token:
       expiration:
         seconds: 7200
-  encryption:
-    secret: oui2er43hn8934vby39
   refresh:
     token:
       expiration:
@@ -29,18 +29,18 @@ spring:
     initialization-mode: always
     username: postgres
     password: qweqwe
-  jackson:
-    serialization:
-      write-dates-as-timestamps: false
-    time-zone: Asia/Almaty
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    time-zone: Asia/Almaty
 
-#Eureke
+#Eureka
 eureka:
   instance:
     appname: auth-service
@@ -48,7 +48,8 @@ eureka:
     leaseRenewalIntervalInSeconds: 5
     lease-expiration-duration-in-seconds: 5
   client:
-    fetchRegistry: true
+    register-with-eureka: false
+    fetchRegistry: false
     registry-fetch-interval-seconds: 5
     serviceUrl:
       defaultZone:  http://entry-eureka-server.kz:9000/eureka

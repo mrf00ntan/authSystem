@@ -34,8 +34,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Transactional
     @Override
-    public Optional<RefreshToken> findByRefreshToken(String refreshToken) {
-        return refreshTokenRepository.findByRefreshTokenAndCreatedGreaterThanEqual(refreshToken, new Date(System.currentTimeMillis() - EXPIRATION_TIME_IN_SECONDS * 1000));
+    public RefreshToken findByRefreshToken(String refreshToken) {
+        return refreshTokenRepository.findByRefreshTokenAndCreatedGreaterThanEqual(refreshToken, new Date(System.currentTimeMillis() - EXPIRATION_TIME_IN_SECONDS * 1000)).orElse(null);
     }
 
     private void deleteExists(User user){
