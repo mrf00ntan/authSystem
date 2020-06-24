@@ -1,7 +1,8 @@
 package kz.eserzhanov.microservice.auth.auth_microservice.config;
 
 import kz.eserzhanov.microservice.auth.auth_microservice.config.jwt.JWTAuthorizationFilter;
-import kz.eserzhanov.microservice.auth.auth_microservice.controller.exception.ExceptionHandlerControllerAdvice;
+import kz.eserzhanov.microservice.auth.auth_microservice.controller.exception.SelfAccessDeniedHandler;
+import kz.eserzhanov.microservice.auth.auth_microservice.controller.exception.SelfAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,12 +29,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler(){
-        return new ExceptionHandlerControllerAdvice();
+        return new SelfAccessDeniedHandler();
     }
 
     @Bean
-    public AuthenticationEntryPoint authenticationFailureHandler(){
-        return new ExceptionHandlerControllerAdvice();
+    public AuthenticationEntryPoint authenticationEntryPoint(){
+        return new SelfAuthenticationEntryPoint();
     }
 
     @Override
@@ -48,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.exceptionHandling()
             .accessDeniedHandler(accessDeniedHandler())
-            .authenticationEntryPoint(authenticationFailureHandler());
+            .authenticationEntryPoint(authenticationEntryPoint());
     }
 
     @Bean
